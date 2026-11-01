@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Persian (Jalali) calendar functions for LibreOffice Calc."""
 from datetime import date, timedelta
+import math
 import uno
 import unohelper
 from com.sun.star.sheet import XAddIn
@@ -120,7 +121,7 @@ def _from_gregorian(gdate):
 
 
 def _serial_date(serial):
-    return _EPOCH + timedelta(days=int(float(serial)))
+    return _EPOCH + timedelta(days=math.floor(float(serial)))
 
 
 def _serial(gdate):
