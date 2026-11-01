@@ -20,61 +20,61 @@
 
 <h3 dir="rtl" align="right">اجزای تاریخ و اعتبارسنجی</h3>
 <table dir="rtl" align="right">
-  <thead><tr><th align="right">تابع و نمونه</th><th align="right">کاربرد و نتیجه</th></tr></thead>
+  <thead><tr><th align="right">کاربرد و نتیجه</th><th align="right">تابع و نمونه</th></tr></thead>
   <tbody>
-    <tr><td dir="ltr" align="left"><code>=JALALI_DAY(14050810)</code></td><td dir="rtl" align="right">روز ماه را می‌دهد؛ نتیجه <code dir="ltr">10</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_MONTH(14050810)</code></td><td dir="rtl" align="right">شمارهٔ ماه را می‌دهد؛ نتیجه <code dir="ltr">8</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_YEAR(14050810)</code></td><td dir="rtl" align="right">سال را می‌دهد؛ نتیجه <code dir="ltr">1405</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_ISLEAPYEAR(1405)</code></td><td dir="rtl" align="right">کبیسه‌بودن سال شمسی را می‌سنجد؛ <code dir="ltr">1</code> یعنی کبیسه و <code dir="ltr">0</code> یعنی عادی. ورودی، سال است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_DAYSINMONTH(1405;8)</code></td><td dir="rtl" align="right">تعداد روزهای ماه را می‌دهد؛ آبان ۳۰ روز دارد. آرگومان‌ها سال و شمارهٔ ماه‌اند.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_ISVALIDDATE(14050810)</code></td><td dir="rtl" align="right">اعتبار تاریخ را می‌سنجد؛ برای تاریخ معتبر <code dir="ltr">TRUE</code> و برای نامعتبر <code dir="ltr">FALSE</code> می‌دهد.</td></tr>
+    <tr><td dir="rtl" align="right">روز ماه را می‌دهد؛ نتیجه <code dir="ltr">10</code> است.</td><td dir="ltr" align="left"><code>=JALALI_DAY(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">شمارهٔ ماه را می‌دهد؛ نتیجه <code dir="ltr">8</code> است.</td><td dir="ltr" align="left"><code>=JALALI_MONTH(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">سال را می‌دهد؛ نتیجه <code dir="ltr">1405</code> است.</td><td dir="ltr" align="left"><code>=JALALI_YEAR(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">کبیسه‌بودن سال شمسی را می‌سنجد؛ <code dir="ltr">1</code> یعنی کبیسه و <code dir="ltr">0</code> یعنی عادی. ورودی، سال است.</td><td dir="ltr" align="left"><code>=JALALI_ISLEAPYEAR(1405)</code></td></tr>
+    <tr><td dir="rtl" align="right">تعداد روزهای ماه را می‌دهد؛ آبان ۳۰ روز دارد. آرگومان‌ها سال و شمارهٔ ماه‌اند.</td><td dir="ltr" align="left"><code>=JALALI_DAYSINMONTH(1405;8)</code></td></tr>
+    <tr><td dir="rtl" align="right">اعتبار تاریخ را می‌سنجد؛ برای تاریخ معتبر <code dir="ltr">TRUE</code> و برای نامعتبر <code dir="ltr">FALSE</code> می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_ISVALIDDATE(14050810)</code></td></tr>
   </tbody>
 </table>
 
 <h3 dir="rtl" align="right">تبدیل تاریخ و تاریخ امروز</h3>
 <table dir="rtl" align="right">
-  <thead><tr><th align="right">تابع و نمونه</th><th align="right">کاربرد و نتیجه</th></tr></thead>
+  <thead><tr><th align="right">کاربرد و نتیجه</th><th align="right">تابع و نمونه</th></tr></thead>
   <tbody>
-    <tr><td dir="ltr" align="left"><code>=JALALI_TOGREGORIAN(14050810)</code></td><td dir="rtl" align="right">تاریخ شمسی را به شماره‌تاریخ میلادی Calc تبدیل می‌کند. قالب سلول را روی تاریخ بگذارید.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_FROMGREGORIAN(A1)</code></td><td dir="rtl" align="right">تاریخ واقعی Calc در <code dir="ltr">A1</code> را به عدد شمسی <code dir="ltr">YYYYMMDD</code> تبدیل می‌کند.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_TODAY()</code></td><td dir="rtl" align="right">تاریخ امروز را به شکل عدد شمسی <code dir="ltr">YYYYMMDD</code> می‌دهد.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_TODAYTEXT()</code></td><td dir="rtl" align="right">تاریخ امروز را همراه با نام روز هفته و به شکل متن می‌دهد؛ مانند «یکشنبه ۱۴۰۵/۰۸/۱۰».</td></tr>
+    <tr><td dir="rtl" align="right">تاریخ شمسی را به شماره‌تاریخ میلادی Calc تبدیل می‌کند. قالب سلول را روی تاریخ بگذارید.</td><td dir="ltr" align="left"><code>=JALALI_TOGREGORIAN(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ واقعی Calc در <code dir="ltr">A1</code> را به عدد شمسی <code dir="ltr">YYYYMMDD</code> تبدیل می‌کند.</td><td dir="ltr" align="left"><code>=JALALI_FROMGREGORIAN(A1)</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ امروز را به شکل عدد شمسی <code dir="ltr">YYYYMMDD</code> می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_TODAY()</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ امروز را همراه با نام روز هفته و به شکل متن می‌دهد؛ مانند «یکشنبه ۱۴۰۵/۰۸/۱۰».</td><td dir="ltr" align="left"><code>=JALALI_TODAYTEXT()</code></td></tr>
   </tbody>
 </table>
 
 <h3 dir="rtl" align="right">جابه‌جایی و فاصلهٔ روزها</h3>
 <table dir="rtl" align="right">
-  <thead><tr><th align="right">تابع و نمونه</th><th align="right">کاربرد و نتیجه</th></tr></thead>
+  <thead><tr><th align="right">کاربرد و نتیجه</th><th align="right">تابع و نمونه</th></tr></thead>
   <tbody>
-    <tr><td dir="ltr" align="left"><code>=JALALI_ADDDAYS(14050810;1)</code></td><td dir="rtl" align="right">یک روز به تاریخ می‌افزاید؛ نتیجه <code dir="ltr">14050811</code> است. عدد منفی روزها را کم می‌کند.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_SUBTRACTDAYS(14050810;1)</code></td><td dir="rtl" align="right">یک روز از تاریخ کم می‌کند؛ نتیجه <code dir="ltr">14050809</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_DAYSDIFF(14050810;14050820)</code></td><td dir="rtl" align="right">فاصلهٔ روزی «تاریخ پایان منهای تاریخ آغاز» را می‌دهد؛ نتیجه <code dir="ltr">10</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_WORKDAY(14050810;5)</code></td><td dir="rtl" align="right">تاریخ ۵ روز کاری پس از تاریخ آغاز را می‌دهد؛ روز آغاز شمرده نمی‌شود. پیش‌فرض آخرهفته شنبه و یکشنبه است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_NETWORKDAYS(14050810;14050820)</code></td><td dir="rtl" align="right">تعداد روزهای کاری بازه را می‌شمارد و دو سر بازه را هم در نظر می‌گیرد. آخرهفتهٔ پیش‌فرض شنبه و یکشنبه است.</td></tr>
+    <tr><td dir="rtl" align="right">یک روز به تاریخ می‌افزاید؛ نتیجه <code dir="ltr">14050811</code> است. عدد منفی روزها را کم می‌کند.</td><td dir="ltr" align="left"><code>=JALALI_ADDDAYS(14050810;1)</code></td></tr>
+    <tr><td dir="rtl" align="right">یک روز از تاریخ کم می‌کند؛ نتیجه <code dir="ltr">14050809</code> است.</td><td dir="ltr" align="left"><code>=JALALI_SUBTRACTDAYS(14050810;1)</code></td></tr>
+    <tr><td dir="rtl" align="right">فاصلهٔ روزی «تاریخ پایان منهای تاریخ آغاز» را می‌دهد؛ نتیجه <code dir="ltr">10</code> است.</td><td dir="ltr" align="left"><code>=JALALI_DAYSDIFF(14050810;14050820)</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ ۵ روز کاری پس از تاریخ آغاز را می‌دهد؛ روز آغاز شمرده نمی‌شود. پیش‌فرض آخرهفته شنبه و یکشنبه است.</td><td dir="ltr" align="left"><code>=JALALI_WORKDAY(14050810;5)</code></td></tr>
+    <tr><td dir="rtl" align="right">تعداد روزهای کاری بازه را می‌شمارد و دو سر بازه را هم در نظر می‌گیرد. آخرهفتهٔ پیش‌فرض شنبه و یکشنبه است.</td><td dir="ltr" align="left"><code>=JALALI_NETWORKDAYS(14050810;14050820)</code></td></tr>
   </tbody>
 </table>
 
 <h3 dir="rtl" align="right">روز هفته، نام ماه و نمایش تاریخ</h3>
 <table dir="rtl" align="right">
-  <thead><tr><th align="right">تابع و نمونه</th><th align="right">کاربرد و نتیجه</th></tr></thead>
+  <thead><tr><th align="right">کاربرد و نتیجه</th><th align="right">تابع و نمونه</th></tr></thead>
   <tbody>
-    <tr><td dir="ltr" align="left"><code>=JALALI_WEEKDAY(14050810)</code></td><td dir="rtl" align="right">شمارهٔ روز هفته را می‌دهد: شنبه <code dir="ltr">0</code>، یکشنبه <code dir="ltr">1</code>، …، جمعه <code dir="ltr">6</code>.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_WEEKDAYNAME(14050810)</code></td><td dir="rtl" align="right">نام فارسی روز هفتهٔ تاریخ را می‌دهد.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_MONTHNAME(8)</code></td><td dir="rtl" align="right">نام ماه را می‌دهد؛ نتیجه «آبان» است. ورودی، شمارهٔ ماه از ۱ تا ۱۲ است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_DATE(14050810)</code></td><td dir="rtl" align="right">تاریخ را به صورت متن <code dir="ltr">YYYY/MM/DD</code> می‌دهد؛ نتیجه <code dir="ltr">1405/08/10</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_YEARMONTH(14050810)</code></td><td dir="rtl" align="right">سال و ماه را به صورت عدد <code dir="ltr">YYYYMM</code> می‌دهد؛ نتیجه <code dir="ltr">140508</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_FIRSTWEEKDAY(1405;8)</code></td><td dir="rtl" align="right">شمارهٔ روز هفتهٔ نخستین روز ماه را می‌دهد؛ شنبه <code dir="ltr">0</code> و جمعه <code dir="ltr">6</code> است. ورودی‌ها سال و ماه‌اند.</td></tr>
+    <tr><td dir="rtl" align="right">شمارهٔ روز هفته را می‌دهد: شنبه <code dir="ltr">0</code>، یکشنبه <code dir="ltr">1</code>، …، جمعه <code dir="ltr">6</code>.</td><td dir="ltr" align="left"><code>=JALALI_WEEKDAY(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">نام فارسی روز هفتهٔ تاریخ را می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_WEEKDAYNAME(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">نام ماه را می‌دهد؛ نتیجه «آبان» است. ورودی، شمارهٔ ماه از ۱ تا ۱۲ است.</td><td dir="ltr" align="left"><code>=JALALI_MONTHNAME(8)</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ را به صورت متن <code dir="ltr">YYYY/MM/DD</code> می‌دهد؛ نتیجه <code dir="ltr">1405/08/10</code> است.</td><td dir="ltr" align="left"><code>=JALALI_DATE(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">سال و ماه را به صورت عدد <code dir="ltr">YYYYMM</code> می‌دهد؛ نتیجه <code dir="ltr">140508</code> است.</td><td dir="ltr" align="left"><code>=JALALI_YEARMONTH(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">شمارهٔ روز هفتهٔ نخستین روز ماه را می‌دهد؛ شنبه <code dir="ltr">0</code> و جمعه <code dir="ltr">6</code> است. ورودی‌ها سال و ماه‌اند.</td><td dir="ltr" align="left"><code>=JALALI_FIRSTWEEKDAY(1405;8)</code></td></tr>
   </tbody>
 </table>
 
 <h3 dir="rtl" align="right">جابه‌جایی ماه‌ها و پایان ماه</h3>
 <table dir="rtl" align="right">
-  <thead><tr><th align="right">تابع و نمونه</th><th align="right">کاربرد و نتیجه</th></tr></thead>
+  <thead><tr><th align="right">کاربرد و نتیجه</th><th align="right">تابع و نمونه</th></tr></thead>
   <tbody>
-    <tr><td dir="ltr" align="left"><code>=JALALI_NEXTMONTH(140508)</code></td><td dir="rtl" align="right">ماه بعد از ورودی <code dir="ltr">YYYYMM</code> را می‌دهد؛ نتیجه <code dir="ltr">140509</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_PREVIOUSMONTH(140508)</code></td><td dir="rtl" align="right">ماه پیش از ورودی <code dir="ltr">YYYYMM</code> را می‌دهد؛ نتیجه <code dir="ltr">140507</code> است.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_EDATE(14050810;3)</code></td><td dir="rtl" align="right">سه ماه به تاریخ می‌افزاید؛ نتیجه <code dir="ltr">14051110</code> است. اگر روز متناظر در ماه مقصد وجود نداشته باشد، آخرین روز آن ماه را می‌دهد. عدد منفی ماه‌ها را کم می‌کند.</td></tr>
-    <tr><td dir="ltr" align="left"><code>=JALALI_EOMONTH(14050810;0)</code></td><td dir="rtl" align="right">آخرین روز ماه شمسی تاریخ ورودی را می‌دهد؛ نتیجه <code dir="ltr">14050830</code> است. عدد مثبت یا منفی، ماه مقصد را جابه‌جا می‌کند.</td></tr>
+    <tr><td dir="rtl" align="right">ماه بعد از ورودی <code dir="ltr">YYYYMM</code> را می‌دهد؛ نتیجه <code dir="ltr">140509</code> است.</td><td dir="ltr" align="left"><code>=JALALI_NEXTMONTH(140508)</code></td></tr>
+    <tr><td dir="rtl" align="right">ماه پیش از ورودی <code dir="ltr">YYYYMM</code> را می‌دهد؛ نتیجه <code dir="ltr">140507</code> است.</td><td dir="ltr" align="left"><code>=JALALI_PREVIOUSMONTH(140508)</code></td></tr>
+    <tr><td dir="rtl" align="right">سه ماه به تاریخ می‌افزاید؛ نتیجه <code dir="ltr">14051110</code> است. اگر روز متناظر در ماه مقصد وجود نداشته باشد، آخرین روز آن ماه را می‌دهد. عدد منفی ماه‌ها را کم می‌کند.</td><td dir="ltr" align="left"><code>=JALALI_EDATE(14050810;3)</code></td></tr>
+    <tr><td dir="rtl" align="right">آخرین روز ماه شمسی تاریخ ورودی را می‌دهد؛ نتیجه <code dir="ltr">14050830</code> است. عدد مثبت یا منفی، ماه مقصد را جابه‌جا می‌کند.</td><td dir="ltr" align="left"><code>=JALALI_EOMONTH(14050810;0)</code></td></tr>
   </tbody>
 </table>
 
