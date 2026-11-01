@@ -1,0 +1,29 @@
+module org { module afshin { module jalali {
+interface XJalaliFunctions {
+    long JalaliDay([in] double fDate);
+    long JalaliMonth([in] double fDate);
+    long JalaliYear([in] double fDate);
+    long JalaliIsLeapYear([in] double onlySal);
+    long JalaliDaysInMonth([in] double yearNo, [in] double monthNo);
+    boolean JalaliIsValidDate([in] double fDate);
+    double JalaliToGregorian([in] double fDate);
+    long JalaliFromGregorian([in] double mDate);
+    long JalaliToday();
+    long JalaliAddDays([in] double fDate, [in] double add);
+    long JalaliSubtractDays([in] double fDate, [in] double subtract);
+    long JalaliDaysDiff([in] double fromDate, [in] double toDate);
+    long JalaliWeekday([in] double fDate);
+    string JalaliWeekdayName([in] double fDate);
+    string JalaliMonthName([in] double mahNo);
+    string JalaliTodayText();
+    string JalaliDate([in] double fDate);
+    long JalaliYearMonth([in] double fDate);
+    long JalaliNextMonth([in] double salMah);
+    long JalaliPreviousMonth([in] double salMah);
+    long JalaliFirstWeekday([in] double yearNo, [in] double monthNo);
+    long JalaliEDate([in] double fDate, [in] double months);
+    long JalaliEOMonth([in] double fDate, [in] double months);
+    long JalaliWorkday([in] double startDate, [in] double days, [in] sequence< sequence<any> > holidays, [in] string weekendMask);
+    long JalaliNetworkdays([in] double startDate, [in] double endDate, [in] sequence< sequence<any> > holidays, [in] string weekendMask);
+};
+}; }; };
