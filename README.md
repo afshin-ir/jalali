@@ -38,7 +38,7 @@
     <tr><td dir="rtl" align="right">تاریخ شمسی را به شماره‌تاریخ میلادی Calc تبدیل می‌کند. قالب سلول را روی تاریخ بگذارید.</td><td dir="ltr" align="left"><code>=JALALI_TOGREGORIAN(14050810)</code></td></tr>
     <tr><td dir="rtl" align="right">تاریخ واقعی Calc در <code dir="ltr">A1</code> را به عدد شمسی <code dir="ltr">YYYYMMDD</code> تبدیل می‌کند.</td><td dir="ltr" align="left"><code>=JALALI_FROMGREGORIAN(A1)</code></td></tr>
     <tr><td dir="rtl" align="right">تاریخ امروز را به شکل عدد شمسی <code dir="ltr">YYYYMMDD</code> می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_TODAY()</code></td></tr>
-    <tr><td dir="rtl" align="right">تاریخ امروز را همراه با نام روز هفته و به شکل متن می‌دهد؛ مانند «یکشنبه ۱۴۰۵/۰۸/۱۰».</td><td dir="ltr" align="left"><code>=JALALI_TODAYTEXT()</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ امروز را همراه با نام روز هفته و به شکل متن می‌دهد؛ مانند «یکشنبه 1405/08/10».</td><td dir="ltr" align="left"><code>=JALALI_TODAYTEXT()</code></td></tr>
   </tbody>
 </table>
 
@@ -97,5 +97,6 @@ JALALI_NETWORKDAYS(startDate; endDate; [weekend]; [holidays])</code></pre>
 <h2 dir="rtl" align="right">ساخت بسته از منبع</h2>
 <p dir="rtl" align="right">برای توسعه به LibreOffice SDK، فایل <code dir="ltr">types.rdb</code> همان نسخه و Python 3 نیاز است:</p>
 <pre dir="ltr"><code>unoidl-write /path/to/program/types.rdb idl/org/afshin/jalali/XJalaliFunctions.idl JalaliFunctions.rdb
+python3 -m unittest discover -s tests
 python3 build_package.py</code></pre>
 <p dir="rtl" align="right">GitHub Actions با ادغام نسخهٔ تازه در <code dir="ltr">main</code> بستهٔ OXT را می‌سازد و در Releases منتشر می‌کند. شمارهٔ نسخه در <code dir="ltr">build_package.py</code> باید به‌روز شود.</p>
