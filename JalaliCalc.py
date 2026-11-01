@@ -41,6 +41,9 @@ def _nowruz(year):
     return _FIRST_NOWRUZ + timedelta(days=days)
 
 
+_LAST_DATE = _nowruz(3178) - timedelta(days=1)
+
+
 def _parts(value):
     n = _integer(value, "date")
     return n // 10000, (n // 100) % 100, n % 100
@@ -100,6 +103,8 @@ def _to_gregorian(value):
 
 
 def _from_gregorian(gdate):
+    if not _FIRST_NOWRUZ <= gdate <= _LAST_DATE:
+        raise ValueError("Jalali year outside supported range")
     jy = gdate.year - 621
     first = _nowruz(jy)
     if gdate < first:
