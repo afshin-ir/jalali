@@ -5,7 +5,7 @@ interface XJalaliFunctions {
     long JalaliYear([in] double fDate) raises (com::sun::star::lang::IllegalArgumentException);
     long JalaliIsLeapYear([in] double onlySal) raises (com::sun::star::lang::IllegalArgumentException);
     long JalaliDaysInMonth([in] double yearNo, [in] double monthNo) raises (com::sun::star::lang::IllegalArgumentException);
-    boolean JalaliIsValidDate([in] double fDate);
+    long JalaliIsValidDate([in] double fDate);
     double JalaliToGregorian([in] double fDate) raises (com::sun::star::lang::IllegalArgumentException);
     long JalaliFromGregorian([in] double mDate) raises (com::sun::star::lang::IllegalArgumentException);
     long JalaliToday();

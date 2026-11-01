@@ -255,7 +255,7 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
         return _month_length(year, month)
 
     def JalaliIsValidDate(self, f_date):
-        return _valid(f_date)
+        return 1 if _valid(f_date) else 0
 
     def JalaliToGregorian(self, f_date):
         return _serial(_to_gregorian(_require_date(f_date)))
@@ -416,7 +416,7 @@ _META = {
     "JalaliYear": ("سال تاریخ شمسی با قالب YYYYMMDD", ["تاریخ"]),
     "JalaliIsLeapYear": ("اگر سال شمسی کبیسه باشد ۱ و در غیر این صورت ۰ برمی‌گرداند", ["سال"]),
     "JalaliDaysInMonth": ("تعداد روزهای ماه شمسی", ["سال", "ماه"]),
-    "JalaliIsValidDate": ("اعتبار تاریخ شمسی YYYYMMDD را بررسی می‌کند", ["تاریخ"]),
+    "JalaliIsValidDate": ("اگر تاریخ شمسی YYYYMMDD معتبر باشد ۱ و در غیر این صورت ۰ برمی‌گرداند", ["تاریخ"]),
     "JalaliToGregorian": ("تاریخ شمسی YYYYMMDD را به شماره‌تاریخ میلادی Calc تبدیل می‌کند", ["تاریخ شمسی"]),
     "JalaliFromGregorian": ("شماره‌تاریخ میلادی Calc را به YYYYMMDD شمسی تبدیل می‌کند", ["تاریخ میلادی"]),
     "JalaliToday": ("تاریخ شمسی امروز را به شکل YYYYMMDD برمی‌گرداند", []),
