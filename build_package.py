@@ -110,6 +110,9 @@ JALALI_EOMONTH, JALALI_WORKDAY, JALALI_NETWORKDAYS
 این افزونه سال‌های ۱ تا ۳۱۷۷ شمسی را پشتیبانی می‌کند. برای محاسبه تقویم از قاعده ۳۳ ساله و یک جدول اصلاحی استفاده می‌شود؛ همان روشی که ICU از نسخه 77.1 به بعد و ICU4X هم به کار می‌برند. نتیجه سال‌های ۱۱۷۸ تا ۳۰۰۰ با محاسبه نجومی و نتیجه سال‌های ۱۲۰۶ تا ۱۴۹۸ با جدول رسمی مرکز تقویم دانشگاه تهران مقایسه شده و درست بوده است. برای سال‌های دیگر مرجعی برای مقایسه نداریم و نتیجه فقط از ادامه همین محاسبه به دست می‌آید. تاریخ یا آرگومان عددی نامعتبر در توابع محاسباتی به‌صورت خطای فرمول گزارش می‌شود؛ JALALI_ISVALIDDATE برای تاریخ نامعتبر مقدار 0 می‌دهد.
 ''', encoding="utf-8")
 
+# Refuse to package a source file Python cannot load.
+compile((root / "JalaliCalc.py").read_bytes(), "JalaliCalc.py", "exec")
+
 output = root / "JalaliCalc.oxt"
 if output.exists():
     output.unlink()
