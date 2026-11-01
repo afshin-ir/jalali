@@ -26,8 +26,8 @@ functions = [
     ("JalaliFirstWeekday", "JALALI_FIRSTWEEKDAY", "شمارهٔ روز هفتهٔ نخستین روز ماه؛ شنبه ۰ و جمعه ۶", [("yearNo", "سال"), ("monthNo", "ماه")]),
     ("JalaliEDate", "JALALI_EDATE", "تاریخ شمسی پس از جابه‌جایی تعداد ماه؛ روز ناموجود به آخر ماه محدود می‌شود", [("fDate", "تاریخ شمسی"), ("months", "ماه‌ها")]),
     ("JalaliEOMonth", "JALALI_EOMONTH", "آخرین روز ماه شمسی پس از جابه‌جایی تعداد ماه", [("fDate", "تاریخ شمسی"), ("months", "ماه‌ها")]),
-    ("JalaliWorkday", "JALALI_WORKDAY", "تاریخ کاری شمسی پس از افزودن روزهای کاری؛ تعطیلات یک محدودهٔ YYYYMMDD و آخرهفته ماسک ۷ رقمی دوشنبه تا یکشنبه است", [("startDate", "تاریخ آغاز"), ("days", "روزهای کاری"), ("holidays", "تعطیلات"), ("weekendMask", "ماسک آخرهفته")]),
-    ("JalaliNetworkdays", "JALALI_NETWORKDAYS", "تعداد روزهای کاری شمسی بین دو تاریخ با احتساب دو سر بازه؛ تعطیلات یک محدودهٔ YYYYMMDD و آخرهفته ماسک ۷ رقمی دوشنبه تا یکشنبه است", [("startDate", "تاریخ آغاز"), ("endDate", "تاریخ پایان"), ("holidays", "تعطیلات"), ("weekendMask", "ماسک آخرهفته")]),
+    ("JalaliWorkday", "JALALI_WORKDAY", "تاریخ کاری شمسی پس از افزودن روزهای کاری؛ آخرهفته و تعطیلات اختیاری‌اند", [("startDate", "تاریخ آغاز"), ("days", "روزهای کاری"), ("weekend", "آخرهفته (اختیاری)"), ("holidays", "تعطیلات (اختیاری)")]),
+    ("JalaliNetworkdays", "JALALI_NETWORKDAYS", "تعداد روزهای کاری شمسی بین دو تاریخ با احتساب دو سر بازه؛ آخرهفته و تعطیلات اختیاری‌اند", [("startDate", "تاریخ آغاز"), ("endDate", "تاریخ پایان"), ("weekend", "آخرهفته (اختیاری)"), ("holidays", "تعطیلات (اختیاری)")]),
 ]
 
 xml = ['''<?xml version="1.0" encoding="UTF-8"?>
@@ -51,7 +51,7 @@ xml.append("</node></node></node></oor:component-data>")
 (root / "description.xml").write_text('''<?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
   <identifier value="org.afshin.jalali.calc"/>
-  <version value="1.2.0"/>
+  <version value="1.3.0"/>
   <dependencies><lo:LibreOffice-minimal-version value="4.1" d:name="LibreOffice 4.1" xmlns:lo="http://libreoffice.org/extensions/description/2011" xmlns:d="http://openoffice.org/extensions/description/2006"/></dependencies>
   <display-name><name lang="fa">توابع تاریخ هجری شمسی برای Calc</name><name lang="en">Jalali Calendar Functions for Calc</name></display-name>
   <publisher><name lang="fa">افشین</name></publisher>
@@ -71,7 +71,7 @@ xml.append("</node></node></node></oor:component-data>")
 </manifest:manifest>
 ''', encoding="utf-8")
 (root / "README-fa.txt").write_text('''افزونهٔ توابع تاریخ هجری شمسی برای LibreOffice Calc
-نسخهٔ ۱٫۲٫۰
+نسخهٔ ۱٫۳٫۰
 
 نصب
 ۱. در LibreOffice از منوی ابزارها ← مدیر افزونه‌ها (Tools → Extension Manager) را باز کنید.
@@ -102,22 +102,23 @@ JALALI_EOMONTH, JALALI_WORKDAY, JALALI_NETWORKDAYS
 توابع افزوده‌شده در نسخهٔ ۱٫۲٫۰
 =JALALI_EDATE(14050810;3)                         نتیجه: 14051110
 =JALALI_EOMONTH(14050810;0)                       نتیجه: 14050830
-=JALALI_WORKDAY(14050810;5;A2:A5;"0000100")      نمونه با جمعه به‌عنوان آخرهفته
-=JALALI_NETWORKDAYS(14050810;14050820;A2:A5;"0000100")
+=JALALI_WORKDAY(14050810;5;"0000100";A2:A5)     نمونه با جمعه به‌عنوان آخرهفته
+=JALALI_NETWORKDAYS(14050810;14050820;"0000100";A2:A5)
 
-برای دو تابع روز کاری، ورودی تعطیلات یک محدودهٔ سلولی از تاریخ‌های شمسی YYYYMMDD است؛ خانه‌های خالی نادیده گرفته می‌شوند. ماسک آخرهفته ۷ نویسه از دوشنبه تا یکشنبه است: ۱ یعنی آخرهفته و ۰ یعنی روز کاری. برای شنبه و یکشنبه از "0000011" و برای جمعه تنها از "0000100" استفاده کنید. این دو آرگومان باید داده شوند؛ اگر تعطیلی ندارید، محدوده‌ای از خانه‌های خالی بدهید. ماسک خالی، آخرهفتهٔ شنبه و یکشنبه را انتخاب می‌کند.
+در دو تابع روز کاری، آرگومان سوم آخرهفته و آرگومان چهارم تعطیلات است؛ هر دو اختیاری‌اند. ماسک هفت‌نویسه‌ای از دوشنبه تا یکشنبه است: ۱ یعنی تعطیل و ۰ یعنی کاری. کدهای عددی Calc نیز پذیرفته می‌شوند: ۱ تا ۷ برای جفت‌روزهای آخرهفته و ۱۱ تا ۱۷ برای یک روز آخرهفته. برای نبود آخرهفتهٔ سفارشی یا تعطیلات، آرگومان را حذف کنید؛ برای تعطیلات بدون تغییر آخرهفته بنویسید: =JALALI_WORKDAY(14050810;5;;A2:A5). خانه‌های خالی و متن در محدودهٔ تعطیلات نادیده گرفته می‌شوند.
 
-الگوریتم جلالی مطابق منطق ماکروی مبنا و با محدودهٔ محاسباتی سال‌های ۱ تا ۳۱۷۷ هجری شمسی است. توابع تاریخ نامعتبر عموماً ۰ یا رشتهٔ خالی می‌دهند.
+الگوریتم جلالی مطابق منطق ماکروی مبنا و با محدودهٔ محاسباتی سال‌های ۱ تا ۳۱۷۷ هجری شمسی است. تاریخ یا آرگومان عددی نامعتبر در توابع محاسباتی به‌صورت خطای فرمول گزارش می‌شود؛ JALALI_ISVALIDDATE برای تاریخ نامعتبر مقدار FALSE می‌دهد.
 ''', encoding="utf-8")
 
 output = root / "JalaliCalc.oxt"
 if output.exists():
     output.unlink()
+package_files = [
+    "CalcAddIns.xcu", "JalaliFunctions.rdb", "JalaliCalc.py",
+    "META-INF/manifest.xml", "README-fa.txt", "description.xml",
+    "description-fa.txt",
+]
 with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as archive:
-    for path in root.rglob("*"):
-        if path.is_file() and path.name not in (
-            "JalaliCalc.oxt", "build_package.py", "JalaliCalc.component",
-            "JalaliFunctions-validated.rdb",
-        ):
-            archive.write(path, path.relative_to(root).as_posix())
+    for relative_path in package_files:
+        archive.write(root / relative_path, relative_path)
 print(output)

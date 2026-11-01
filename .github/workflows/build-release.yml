@@ -1,0 +1,76 @@
+name: Build and release JalaliCalc
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install LibreOffice SDK tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libreoffice-dev libreoffice-core
+
+      - name: Build UNO type library and OXT
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_BIN="$(find /usr/lib/libreoffice -type f -name unoidl-write -print -quit)"
+          TYPES_RDB="$(find /usr/lib/libreoffice -type f -name types.rdb -print -quit)"
+          test -n "$SDK_BIN"
+          test -n "$TYPES_RDB"
+          "$SDK_BIN" "$TYPES_RDB" idl/org/afshin/jalali/XJalaliFunctions.idl JalaliFunctions.rdb
+          python3 build_package.py
+          unzip -t JalaliCalc.oxt
+
+      - name: Verify tag matches extension version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          python3 - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+          version = ET.parse("description.xml").getroot().find("{http://openoffice.org/extensions/description/2006}version").get("value")
+          tag = os.environ["GITHUB_REF_NAME"]
+          if tag != f"v{version}":
+              raise SystemExit(f"Tag {tag} does not match extension version {version}")
+          PY
+
+      - name: Upload OXT build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JalaliCalc-OXT
+          path: JalaliCalc.oxt
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download built OXT
+        uses: actions/download-artifact@v4
+        with:
+          name: JalaliCalc-OXT
+          path: release
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: release/JalaliCalc.oxt
+          fail_on_unmatched_files: true
