@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component loader="com.sun.star.loader.Python" uri="JalaliCalc.py">
+  <implementation name="org.afshin.jalali.JalaliCalcAddIn">
+    <service name="com.sun.star.sheet.AddIn"/>
+  </implementation>
+</component>
