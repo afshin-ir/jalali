@@ -51,7 +51,7 @@ xml.append("</node></node></node></oor:component-data>")
 (root / "description.xml").write_text('''<?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
   <identifier value="org.afshin.jalali.calc"/>
-  <version value="1.3.0"/>
+  <version value="1.3.1"/>
   <dependencies><lo:LibreOffice-minimal-version value="4.1" d:name="LibreOffice 4.1" xmlns:lo="http://libreoffice.org/extensions/description/2011" xmlns:d="http://openoffice.org/extensions/description/2006"/></dependencies>
   <display-name><name lang="fa">توابع تاریخ هجری شمسی برای Calc</name><name lang="en">Jalali Calendar Functions for Calc</name></display-name>
   <publisher><name lang="fa">افشین</name></publisher>
@@ -71,7 +71,7 @@ xml.append("</node></node></node></oor:component-data>")
 </manifest:manifest>
 ''', encoding="utf-8")
 (root / "README-fa.txt").write_text('''افزونهٔ توابع تاریخ هجری شمسی برای LibreOffice Calc
-نسخهٔ ۱٫۳٫۰
+نسخهٔ ۱٫۳٫۱
 
 نصب
 ۱. در LibreOffice از منوی ابزارها ← مدیر افزونه‌ها (Tools → Extension Manager) را باز کنید.
