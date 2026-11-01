@@ -18,6 +18,9 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
+      - name: Run calendar tests
+        run: python3 -m unittest discover -s tests -v
+
       - name: Install LibreOffice SDK tools
         run: |
           sudo apt-get update
