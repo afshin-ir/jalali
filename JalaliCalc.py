@@ -9,35 +9,36 @@ from com.sun.star.lang import XLocalizable
 from com.sun.star.lang import IllegalArgumentException
 
 _IMPL = "org.afshin.jalali.JalaliCalcAddIn"
-_BREAKS = (-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210,
-           1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178)
 _EPOCH = date(1899, 12, 30)  # LibreOffice Calc's date serial epoch
+_FIRST_NOWRUZ = date(622, 3, 21)  # 1 Farvardin of year 1, proleptic Gregorian
+# 33-year rule plus this correction table, the same algorithm as ICU 77.1+ and ICU4X.
+# It matches the astronomical calendar (52.5 E meridian) for 1178-3000 AP and
+# extrapolates arithmetically outside that range.
+# Years the 33-year rule calls leap but are not; the next year is leap instead.
+_NON_LEAP_CORRECTION = frozenset((
+    1502, 1601, 1634, 1667, 1700, 1733, 1766, 1799, 1832, 1865, 1898, 1931,
+    1964, 1997, 2030, 2059, 2063, 2096, 2129, 2158, 2162, 2191, 2195, 2224,
+    2228, 2257, 2261, 2290, 2294, 2323, 2327, 2356, 2360, 2389, 2393, 2422,
+    2426, 2455, 2459, 2488, 2492, 2521, 2525, 2554, 2558, 2587, 2591, 2620,
+    2624, 2653, 2657, 2686, 2690, 2719, 2723, 2748, 2752, 2756, 2781, 2785,
+    2789, 2818, 2822, 2847, 2851, 2855, 2880, 2884, 2888, 2913, 2917, 2921,
+    2946, 2950, 2954, 2979, 2983, 2987,
+))
 
 
-def _jal_cal(jy):
-    jy = int(jy)
-    if jy < _BREAKS[0] or jy >= _BREAKS[-1]:
-        raise ValueError("Jalali year outside supported range")
-    gy = jy + 621
-    leap_j, jp, jump = -14, _BREAKS[0], 0
-    for jm in _BREAKS[1:]:
-        jump = jm - jp
-        if jy < jm:
-            break
-        leap_j += (jump // 33) * 8 + ((jump % 33) // 4)
-        jp = jm
-    n = jy - jp
-    leap_j += (n // 33) * 8 + (((n % 33) + 3) // 4)
-    if (jump % 33) == 4 and (jump - n) == 4:
-        leap_j += 1
-    leap_g = (gy // 4) - ((((gy // 100) + 1) * 3) // 4) - 150
-    march = 20 + leap_j - leap_g
-    if (jump - n) < 6:
-        n = n - jump + ((jump + 4) // 33) * 33
-    leap = ((n + 1) % 33 - 1) % 4
-    if leap == -1:
-        leap = 4
-    return leap, gy, march
+def _is_leap(year):
+    if year in _NON_LEAP_CORRECTION:
+        return False
+    if year - 1 in _NON_LEAP_CORRECTION:
+        return True
+    return (25 * year + 11) % 33 < 8
+
+
+def _nowruz(year):
+    days = 365 * (year - 1) + (8 * year + 21) // 33
+    if year - 1 in _NON_LEAP_CORRECTION:
+        days -= 1
+    return _FIRST_NOWRUZ + timedelta(days=days)
 
 
 def _parts(value):
@@ -84,7 +85,7 @@ def _valid(value):
         elif m <= 11:
             mdays = 30
         else:
-            mdays = 30 if _jal_cal(y)[0] == 0 else 29
+            mdays = 30 if _is_leap(y) else 29
         return d <= mdays
     except Exception:
         return False
@@ -94,20 +95,16 @@ def _to_gregorian(value):
     if not _valid(value):
         raise ValueError("Invalid Jalali date")
     y, m, d = _parts(value)
-    _, gy, march = _jal_cal(y)
-    first = date(gy, 3, march)
     offset = (m - 1) * 31 + d - 1 if m <= 6 else 186 + (m - 7) * 30 + d - 1
-    return first + timedelta(days=offset)
+    return _nowruz(y) + timedelta(days=offset)
 
 
 def _from_gregorian(gdate):
     jy = gdate.year - 621
-    _, jgy, march = _jal_cal(jy)
-    first = date(jgy, 3, march)
+    first = _nowruz(jy)
     if gdate < first:
         jy -= 1
-        _, jgy, march = _jal_cal(jy)
-        first = date(jgy, 3, march)
+        first = _nowruz(jy)
     k = (gdate - first).days
     if k <= 185:
         jm, jd = 1 + k // 31, k % 31 + 1
@@ -130,7 +127,7 @@ def _month_length(year, month):
         return 31
     if month <= 11:
         return 30
-    return 30 if _jal_cal(year)[0] == 0 else 29
+    return 30 if _is_leap(year) else 29
 
 
 def _flatten_values(value):
@@ -243,7 +240,7 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
 
     def JalaliIsLeapYear(self, only_sal):
         year = _require_year(only_sal)
-        return 1 if _jal_cal(year)[0] == 0 else 0
+        return 1 if _is_leap(year) else 0
 
     def JalaliDaysInMonth(self, year_no, month_no):
         year = _require_year(year_no, "سال", 0)
