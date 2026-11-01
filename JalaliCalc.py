@@ -377,19 +377,13 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
         mask = _weekend_mask(weekend_mask)
         step = 1 if count >= 0 else -1
         remaining = abs(count)
-        if count == 0:
-            return _from_gregorian(current)
-        current += timedelta(days=step)
         while remaining:
+            current += timedelta(days=step)
+            if not _FIRST_NOWRUZ <= current <= _LAST_DATE:
+                _argument_error("نتیجه خارج از محدودهٔ تاریخ‌های پشتیبانی‌شده است.", 1)
             if _is_workday(current, holiday_dates, mask):
                 remaining -= 1
-                if remaining == 0:
-                    break
-            current += timedelta(days=step)
-        try:
-            return _from_gregorian(current)
-        except ValueError:
-            _argument_error("نتیجه خارج از محدودهٔ تاریخ‌های پشتیبانی‌شده است.", 1)
+        return _from_gregorian(current)
 
     def JalaliNetworkdays(self, start_date, end_date, weekend_mask=None, holidays=None):
         start = _to_gregorian(_require_date(start_date, "تاریخ آغاز", 0))
