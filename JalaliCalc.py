@@ -11,7 +11,15 @@ from com.sun.star.lang import IllegalArgumentException
 
 _IMPL = "org.afshin.jalali.JalaliCalcAddIn"
 _EPOCH = date(1899, 12, 30)  # LibreOffice Calc's date serial epoch
+_MIN_YEAR, _MAX_YEAR = 1, 3177
 _FIRST_NOWRUZ = date(622, 3, 21)  # 1 Farvardin of year 1, proleptic Gregorian
+_DATE_RANGE_ERROR = "نتیجه خارج از محدوده تاریخ‌های پشتیبانی‌شده است."
+_WEEKEND_CODES = {  # Calc's WORKDAY.INTL codes as masks from Monday to Sunday
+    1: "0000011", 2: "1000001", 3: "1100000", 4: "0110000",
+    5: "0011000", 6: "0001100", 7: "0000110", 11: "0000001",
+    12: "1000000", 13: "0100000", 14: "0010000", 15: "0001000",
+    16: "0000100", 17: "0000010",
+}
 # 33-year rule plus this correction table, the same algorithm as ICU 77.1+ and ICU4X.
 # It matches the astronomical calendar (52.5 E meridian) for 1178-3000 AP and
 # extrapolates arithmetically outside that range.
@@ -42,7 +50,7 @@ def _nowruz(year):
     return _FIRST_NOWRUZ + timedelta(days=days)
 
 
-_LAST_DATE = _nowruz(3178) - timedelta(days=1)
+_LAST_DATE = _nowruz(_MAX_YEAR + 1) - timedelta(days=1)
 
 
 def _parts(value):
@@ -74,30 +82,33 @@ def _require_date(value, label="تاریخ شمسی", position=0):
 
 def _require_year(value, label="سال", position=0):
     year = _integer(value, label, position)
-    if not 1 <= year <= 3177:
+    if not _MIN_YEAR <= year <= _MAX_YEAR:
         _argument_error("«%s» باید در بازهٔ ۱ تا ۳۱۷۷ باشد." % label, position)
     return year
+
+
+def _require_month(value, position=0):
+    month = _integer(value, "ماه", position)
+    if not 1 <= month <= 12:
+        _argument_error("ماه باید بین ۱ تا ۱۲ باشد.", position)
+    return month
+
+
+def _require_year_month(value):
+    year, month = divmod(_integer(value, "سال‌وماه"), 100)
+    return _require_year(year), _require_month(month)
 
 
 def _valid(value):
     try:
         y, m, d = _parts(value)
-        if y < 1 or y > 3177 or m < 1 or m > 12 or d < 1:
-            return False
-        if m <= 6:
-            mdays = 31
-        elif m <= 11:
-            mdays = 30
-        else:
-            mdays = 30 if _is_leap(y) else 29
-        return d <= mdays
+        return _MIN_YEAR <= y <= _MAX_YEAR and 1 <= m <= 12 and 1 <= d <= _month_length(y, m)
     except Exception:
         return False
 
 
 def _to_gregorian(value):
-    if not _valid(value):
-        raise ValueError("Invalid Jalali date")
+    """Gregorian date of a YYYYMMDD value that _require_date has already accepted."""
     y, m, d = _parts(value)
     offset = (m - 1) * 31 + d - 1 if m <= 6 else 186 + (m - 7) * 30 + d - 1
     return _nowruz(y) + timedelta(days=offset)
@@ -136,6 +147,21 @@ def _month_length(year, month):
     return 30 if _is_leap(year) else 29
 
 
+def _add_days(value, days):
+    current = _to_gregorian(_require_date(value))
+    try:
+        return _from_gregorian(current + timedelta(days=days))
+    except (ValueError, OverflowError):
+        _argument_error(_DATE_RANGE_ERROR, 1)
+
+
+def _shift_month(year, month, offset, position=0):
+    target_year, target_month0 = divmod(year * 12 + month - 1 + offset, 12)
+    if not _MIN_YEAR <= target_year <= _MAX_YEAR:
+        _argument_error("نتیجه خارج از محدوده سال‌های پشتیبانی‌شده است.", position)
+    return target_year, target_month0 + 1
+
+
 def _flatten_values(value):
     if value is None:
         return
@@ -158,10 +184,7 @@ def _holiday_set(values):
             continue
         if numeric == 0:
             continue
-        number = _integer(numeric, "تاریخ تعطیل", 3)
-        if not _valid(number):
-            _argument_error("محدودهٔ تعطیلات شامل تاریخ شمسی نامعتبر است.", 3)
-        result.add(_to_gregorian(number))
+        result.add(_to_gregorian(_require_date(numeric, "تاریخ تعطیل", 3)))
     return result
 
 
@@ -170,15 +193,9 @@ def _weekend_mask(value):
         return "0000011"
     if isinstance(value, (int, float)):
         code = _integer(value, "آخرهفته", 2)
-        weekend_codes = {
-            1: "0000011", 2: "1000001", 3: "1100000", 4: "0110000",
-            5: "0011000", 6: "0001100", 7: "0000110", 11: "0000001",
-            12: "1000000", 13: "0100000", 14: "0010000", 15: "0001000",
-            16: "0000100", 17: "0000010",
-        }
-        if code not in weekend_codes:
+        if code not in _WEEKEND_CODES:
             _argument_error("کد آخرهفته باید از ۱ تا ۷ یا ۱۱ تا ۱۷ باشد.", 2)
-        return weekend_codes[code]
+        return _WEEKEND_CODES[code]
     mask = str(value)
     if len(mask) != 7 or any(char not in "01" for char in mask) or all(c == "1" for c in mask):
         _argument_error("ماسک آخرهفته باید ۷ نویسهٔ ۰/۱ داشته باشد و دست‌کم یک روز کاری بگذارد.", 2)
@@ -249,11 +266,7 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
         return 1 if _is_leap(year) else 0
 
     def JalaliDaysInMonth(self, year_no, month_no):
-        year = _require_year(year_no, "سال", 0)
-        month = _integer(month_no, "ماه", 1)
-        if not 1 <= month <= 12:
-            _argument_error("ماه باید بین ۱ تا ۱۲ باشد.", 1)
-        return _month_length(year, month)
+        return _month_length(_require_year(year_no), _require_month(month_no, 1))
 
     def JalaliIsValidDate(self, f_date):
         return 1 if _valid(f_date) else 0
@@ -271,20 +284,10 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
         return _from_gregorian(date.today())
 
     def JalaliAddDays(self, f_date, add):
-        current = _to_gregorian(_require_date(f_date))
-        days = _integer(add, "تعداد روز", 1)
-        try:
-            return _from_gregorian(current + timedelta(days=days))
-        except (ValueError, OverflowError):
-            _argument_error("نتیجه خارج از محدودهٔ تاریخ‌های پشتیبانی‌شده است.", 1)
+        return _add_days(f_date, _integer(add, "تعداد روز", 1))
 
     def JalaliSubtractDays(self, f_date, subtract):
-        current = _to_gregorian(_require_date(f_date))
-        days = _integer(subtract, "تعداد روز", 1)
-        try:
-            return _from_gregorian(current - timedelta(days=days))
-        except (ValueError, OverflowError):
-            _argument_error("نتیجه خارج از محدودهٔ تاریخ‌های پشتیبانی‌شده است.", 1)
+        return _add_days(f_date, -_integer(subtract, "تعداد روز", 1))
 
     def JalaliDaysDiff(self, from_date, to_date):
         start = _to_gregorian(_require_date(from_date, "تاریخ آغاز", 0))
@@ -300,10 +303,7 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
 
     def JalaliMonthName(self, mah_no):
         names = ("فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند")
-        month = _integer(mah_no, "ماه", 0)
-        if not 1 <= month <= 12:
-            _argument_error("ماه باید بین ۱ تا ۱۲ باشد.", 0)
-        return names[month - 1]
+        return names[_require_month(mah_no) - 1]
 
     def JalaliTodayText(self):
         today = self.JalaliToday()
@@ -318,57 +318,25 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
         return year * 100 + month
 
     def JalaliNextMonth(self, sal_mah):
-        value = _integer(sal_mah, "سال‌وماه", 0)
-        year, month = divmod(value, 100)
-        _require_year(year)
-        if not 1 <= month <= 12:
-            _argument_error("ماه باید بین ۱ تا ۱۲ باشد.", 0)
-        if month == 12:
-            if year == 3177:
-                _argument_error("نتیجه خارج از محدودهٔ سال‌های پشتیبانی‌شده است.", 0)
-            return (year + 1) * 100 + 1
-        return year * 100 + month + 1
+        year, month = _shift_month(*_require_year_month(sal_mah), 1)
+        return year * 100 + month
 
     def JalaliPreviousMonth(self, sal_mah):
-        value = _integer(sal_mah, "سال‌وماه", 0)
-        year, month = divmod(value, 100)
-        _require_year(year)
-        if not 1 <= month <= 12:
-            _argument_error("ماه باید بین ۱ تا ۱۲ باشد.", 0)
-        if month == 1:
-            if year == 1:
-                _argument_error("نتیجه خارج از محدودهٔ سال‌های پشتیبانی‌شده است.", 0)
-            return (year - 1) * 100 + 12
-        return year * 100 + month - 1
+        year, month = _shift_month(*_require_year_month(sal_mah), -1)
+        return year * 100 + month
 
     def JalaliFirstWeekday(self, year_no, month_no):
-        year = _require_year(year_no, "سال", 0)
-        month = _integer(month_no, "ماه", 1)
-        if not 1 <= month <= 12:
-            _argument_error("ماه باید بین ۱ تا ۱۲ باشد.", 1)
-        fdate = year * 10000 + month * 100 + 1
-        return self.JalaliWeekday(fdate)
+        return self.JalaliWeekday(_require_year(year_no) * 10000 + _require_month(month_no, 1) * 100 + 1)
 
     def JalaliEDate(self, f_date, months):
         year, month, day = _parts(_require_date(f_date))
-        offset = _integer(months, "ماه‌ها", 1)
-        index = year * 12 + month - 1 + offset
-        target_year, target_month0 = divmod(index, 12)
-        target_month = target_month0 + 1
-        if not 1 <= target_year <= 3177:
-            _argument_error("نتیجه خارج از محدودهٔ سال‌های پشتیبانی‌شده است.", 1)
-        target_day = min(day, _month_length(target_year, target_month))
-        return target_year * 10000 + target_month * 100 + target_day
+        year, month = _shift_month(year, month, _integer(months, "ماه‌ها", 1), 1)
+        return year * 10000 + month * 100 + min(day, _month_length(year, month))
 
     def JalaliEOMonth(self, f_date, months):
         year, month, _ = _parts(_require_date(f_date))
-        offset = _integer(months, "ماه‌ها", 1)
-        index = year * 12 + month - 1 + offset
-        target_year, target_month0 = divmod(index, 12)
-        target_month = target_month0 + 1
-        if not 1 <= target_year <= 3177:
-            _argument_error("نتیجه خارج از محدودهٔ سال‌های پشتیبانی‌شده است.", 1)
-        return target_year * 10000 + target_month * 100 + _month_length(target_year, target_month)
+        year, month = _shift_month(year, month, _integer(months, "ماه‌ها", 1), 1)
+        return year * 10000 + month * 100 + _month_length(year, month)
 
     def JalaliWorkday(self, start_date, days, weekend_mask=None, holidays=None):
         current = _to_gregorian(_require_date(start_date, "تاریخ آغاز", 0))
@@ -380,7 +348,7 @@ class JalaliCalcAddIn(unohelper.Base, XAddIn, XLocalizable, XJalaliFunctions):
         while remaining:
             current += timedelta(days=step)
             if not _FIRST_NOWRUZ <= current <= _LAST_DATE:
-                _argument_error("نتیجه خارج از محدودهٔ تاریخ‌های پشتیبانی‌شده است.", 1)
+                _argument_error(_DATE_RANGE_ERROR, 1)
             if _is_workday(current, holiday_dates, mask):
                 remaining -= 1
         return _from_gregorian(current)
