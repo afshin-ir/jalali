@@ -27,7 +27,7 @@
     <tr><td dir="rtl" align="right">سال را می‌دهد؛ نتیجه <code dir="ltr">1405</code> است.</td><td dir="ltr" align="left"><code>=JALALI_YEAR(14050810)</code></td></tr>
     <tr><td dir="rtl" align="right">کبیسه‌بودن سال شمسی را می‌سنجد؛ <code dir="ltr">1</code> یعنی کبیسه و <code dir="ltr">0</code> یعنی عادی. ورودی، سال است.</td><td dir="ltr" align="left"><code>=JALALI_ISLEAPYEAR(1405)</code></td></tr>
     <tr><td dir="rtl" align="right">تعداد روزهای ماه را می‌دهد؛ آبان ۳۰ روز دارد. آرگومان‌ها سال و شمارهٔ ماه‌اند.</td><td dir="ltr" align="left"><code>=JALALI_DAYSINMONTH(1405;8)</code></td></tr>
-    <tr><td dir="rtl" align="right">اعتبار تاریخ را می‌سنجد؛ برای تاریخ معتبر <code dir="ltr">TRUE</code> و برای نامعتبر <code dir="ltr">FALSE</code> می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_ISVALIDDATE(14050810)</code></td></tr>
+    <tr><td dir="rtl" align="right">معتبر بودن تاریخ را بررسی می‌کند؛ اگر تاریخ معتبر باشد <code dir="ltr">1</code> و اگر نباشد <code dir="ltr">0</code> می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_ISVALIDDATE(14050810)</code></td></tr>
   </tbody>
 </table>
 
@@ -38,7 +38,7 @@
     <tr><td dir="rtl" align="right">تاریخ شمسی را به شماره‌تاریخ میلادی Calc تبدیل می‌کند. قالب سلول را روی تاریخ بگذارید.</td><td dir="ltr" align="left"><code>=JALALI_TOGREGORIAN(14050810)</code></td></tr>
     <tr><td dir="rtl" align="right">تاریخ واقعی Calc در <code dir="ltr">A1</code> را به عدد شمسی <code dir="ltr">YYYYMMDD</code> تبدیل می‌کند.</td><td dir="ltr" align="left"><code>=JALALI_FROMGREGORIAN(A1)</code></td></tr>
     <tr><td dir="rtl" align="right">تاریخ امروز را به شکل عدد شمسی <code dir="ltr">YYYYMMDD</code> می‌دهد.</td><td dir="ltr" align="left"><code>=JALALI_TODAY()</code></td></tr>
-    <tr><td dir="rtl" align="right">تاریخ امروز را همراه با نام روز هفته و به شکل متن می‌دهد؛ مانند «یکشنبه ۱۴۰۵/۰۸/۱۰».</td><td dir="ltr" align="left"><code>=JALALI_TODAYTEXT()</code></td></tr>
+    <tr><td dir="rtl" align="right">تاریخ امروز را همراه با نام روز هفته و به شکل متن می‌دهد؛ مانند «یکشنبه 1405/08/10».</td><td dir="ltr" align="left"><code>=JALALI_TODAYTEXT()</code></td></tr>
   </tbody>
 </table>
 
@@ -90,11 +90,13 @@ JALALI_NETWORKDAYS(startDate; endDate; [weekend]; [holidays])</code></pre>
 <p dir="rtl" align="right">در نمونهٔ سوم، آرگومان آخرهفته خالی است تا آخرهفتهٔ پیش‌فرض بماند و محدودهٔ تعطیلات از <code dir="ltr">A2:A4</code> خوانده شود. اگر هیچ‌کدام را نمی‌خواهید، هر دو آرگومان اختیاری را حذف کنید.</p>
 
 <h2 dir="rtl" align="right">خطاها و محدودهٔ پشتیبانی</h2>
-<p dir="rtl" align="right">تاریخ یا آرگومان نامعتبر در توابع محاسباتی خطای فرمول ایجاد می‌کند؛ نتیجهٔ نامعتبر به صورت <code dir="ltr">0</code> یا متن خالی پنهان نمی‌شود. <code dir="ltr">JALALI_ISVALIDDATE</code> استثناست و برای تاریخ نامعتبر <code dir="ltr">FALSE</code> می‌دهد. محدودهٔ محاسباتی تاریخ شمسی سال‌های ۱ تا ۳۱۷۷ است.</p>
+<p dir="rtl" align="right">تاریخ یا آرگومان نامعتبر در توابع محاسباتی خطای فرمول می‌دهد و نتیجه نامعتبر به صورت <code dir="ltr">0</code> یا متن خالی پنهان نمی‌شود. فقط <code dir="ltr">JALALI_ISVALIDDATE</code> خطا نمی‌دهد و برای تاریخ نامعتبر <code dir="ltr">0</code> برمی‌گرداند. این افزونه سال‌های ۱ تا ۳۱۷۷ شمسی را پشتیبانی می‌کند.</p>
+<p dir="rtl" align="right">برای محاسبه تقویم از قاعده ۳۳ ساله و یک جدول اصلاحی استفاده می‌شود؛ همان روشی که ICU از نسخه 77.1 به بعد و ICU4X هم به کار می‌برند. نتیجه سال‌های ۱۱۷۸ تا ۳۰۰۰ با محاسبه نجومی و نتیجه سال‌های ۱۲۰۶ تا ۱۴۹۸ با جدول رسمی مرکز تقویم دانشگاه تهران مقایسه شده و درست بوده است. برای سال‌های دیگر مرجعی برای مقایسه نداریم و نتیجه فقط از ادامه همین محاسبه به دست می‌آید.</p>
 <p dir="rtl" align="right">تبدیل سریال میلادی در نسخهٔ کنونی بر پایهٔ مبدأ پیش‌فرض Calc، یعنی <code dir="ltr">1899-12-30</code>، است. سندهایی که مبدأ تاریخ دیگری دارند ممکن است به تبدیل ویژه نیاز داشته باشند.</p>
 
 <h2 dir="rtl" align="right">ساخت بسته از منبع</h2>
 <p dir="rtl" align="right">برای توسعه به LibreOffice SDK، فایل <code dir="ltr">types.rdb</code> همان نسخه و Python 3 نیاز است:</p>
 <pre dir="ltr"><code>unoidl-write /path/to/program/types.rdb idl/org/afshin/jalali/XJalaliFunctions.idl JalaliFunctions.rdb
+python3 -m unittest discover -s tests
 python3 build_package.py</code></pre>
 <p dir="rtl" align="right">GitHub Actions با ادغام نسخهٔ تازه در <code dir="ltr">main</code> بستهٔ OXT را می‌سازد و در Releases منتشر می‌کند. شمارهٔ نسخه در <code dir="ltr">build_package.py</code> باید به‌روز شود.</p>

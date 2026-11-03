@@ -8,7 +8,7 @@ functions = [
     ("JalaliYear", "JALALI_YEAR", "سال تاریخ شمسی با قالب YYYYMMDD", [("fDate", "تاریخ")]),
     ("JalaliIsLeapYear", "JALALI_ISLEAPYEAR", "اگر سال شمسی کبیسه باشد ۱ و در غیر این صورت ۰ برمی‌گرداند", [("onlySal", "سال")]),
     ("JalaliDaysInMonth", "JALALI_DAYSINMONTH", "تعداد روزهای ماه شمسی", [("yearNo", "سال"), ("monthNo", "ماه")]),
-    ("JalaliIsValidDate", "JALALI_ISVALIDDATE", "اعتبار تاریخ شمسی YYYYMMDD را بررسی می‌کند", [("fDate", "تاریخ")]),
+    ("JalaliIsValidDate", "JALALI_ISVALIDDATE", "اگر تاریخ شمسی YYYYMMDD معتبر باشد ۱ و در غیر این صورت ۰ برمی‌گرداند", [("fDate", "تاریخ")]),
     ("JalaliToGregorian", "JALALI_TOGREGORIAN", "تاریخ شمسی YYYYMMDD را به شماره‌تاریخ میلادی Calc تبدیل می‌کند", [("fDate", "تاریخ شمسی")]),
     ("JalaliFromGregorian", "JALALI_FROMGREGORIAN", "شماره‌تاریخ میلادی Calc را به YYYYMMDD شمسی تبدیل می‌کند", [("mDate", "تاریخ میلادی")]),
     ("JalaliToday", "JALALI_TODAY", "تاریخ شمسی امروز را به شکل YYYYMMDD برمی‌گرداند", []),
@@ -51,7 +51,7 @@ xml.append("</node></node></node></oor:component-data>")
 (root / "description.xml").write_text('''<?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
   <identifier value="org.afshin.jalali.calc"/>
-  <version value="1.3.1"/>
+  <version value="1.3.2"/>
   <dependencies><lo:LibreOffice-minimal-version value="4.1" d:name="LibreOffice 4.1" xmlns:lo="http://libreoffice.org/extensions/description/2011" xmlns:d="http://openoffice.org/extensions/description/2006"/></dependencies>
   <display-name><name lang="fa">توابع تاریخ هجری شمسی برای Calc</name><name lang="en">Jalali Calendar Functions for Calc</name></display-name>
   <publisher><name lang="fa">افشین</name></publisher>
@@ -71,7 +71,7 @@ xml.append("</node></node></node></oor:component-data>")
 </manifest:manifest>
 ''', encoding="utf-8")
 (root / "README-fa.txt").write_text('''افزونهٔ توابع تاریخ هجری شمسی برای LibreOffice Calc
-نسخهٔ ۱٫۳٫۱
+نسخه ۱٫۳٫۲
 
 نصب
 ۱. در LibreOffice از منوی ابزارها ← مدیر افزونه‌ها (Tools → Extension Manager) را باز کنید.
@@ -107,8 +107,11 @@ JALALI_EOMONTH, JALALI_WORKDAY, JALALI_NETWORKDAYS
 
 در دو تابع روز کاری، آرگومان سوم آخرهفته و آرگومان چهارم تعطیلات است؛ هر دو اختیاری‌اند. ماسک هفت‌نویسه‌ای از دوشنبه تا یکشنبه است: ۱ یعنی تعطیل و ۰ یعنی کاری. کدهای عددی Calc نیز پذیرفته می‌شوند: ۱ تا ۷ برای جفت‌روزهای آخرهفته و ۱۱ تا ۱۷ برای یک روز آخرهفته. برای نبود آخرهفتهٔ سفارشی یا تعطیلات، آرگومان را حذف کنید؛ برای تعطیلات بدون تغییر آخرهفته بنویسید: =JALALI_WORKDAY(14050810;5;;A2:A5). خانه‌های خالی و متن در محدودهٔ تعطیلات نادیده گرفته می‌شوند.
 
-الگوریتم جلالی مطابق منطق ماکروی مبنا و با محدودهٔ محاسباتی سال‌های ۱ تا ۳۱۷۷ هجری شمسی است. تاریخ یا آرگومان عددی نامعتبر در توابع محاسباتی به‌صورت خطای فرمول گزارش می‌شود؛ JALALI_ISVALIDDATE برای تاریخ نامعتبر مقدار FALSE می‌دهد.
+این افزونه سال‌های ۱ تا ۳۱۷۷ شمسی را پشتیبانی می‌کند. برای محاسبه تقویم از قاعده ۳۳ ساله و یک جدول اصلاحی استفاده می‌شود؛ همان روشی که ICU از نسخه 77.1 به بعد و ICU4X هم به کار می‌برند. نتیجه سال‌های ۱۱۷۸ تا ۳۰۰۰ با محاسبه نجومی و نتیجه سال‌های ۱۲۰۶ تا ۱۴۹۸ با جدول رسمی مرکز تقویم دانشگاه تهران مقایسه شده و درست بوده است. برای سال‌های دیگر مرجعی برای مقایسه نداریم و نتیجه فقط از ادامه همین محاسبه به دست می‌آید. تاریخ یا آرگومان عددی نامعتبر در توابع محاسباتی به‌صورت خطای فرمول گزارش می‌شود؛ JALALI_ISVALIDDATE برای تاریخ نامعتبر مقدار 0 می‌دهد.
 ''', encoding="utf-8")
+
+# Refuse to package a source file Python cannot load.
+compile((root / "JalaliCalc.py").read_bytes(), "JalaliCalc.py", "exec")
 
 output = root / "JalaliCalc.oxt"
 if output.exists():
